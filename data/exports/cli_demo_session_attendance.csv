@@ -1,0 +1,3 @@
+session_id,participant_id,first_seen,last_seen,accumulated_presence_seconds,attendance_status,presence_percentage,interval_count,last_evaluated_at
+cli_demo_session,Participant_01,0.0,8.0,8.0,PRESENT,66.7,1,7.87
+cli_demo_session,Participant_02,1.6,8.0,6.4,PRESENT,53.3,1,7.87

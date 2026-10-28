@@ -1,0 +1,82 @@
+{
+  "session_id": "cli_demo_session",
+  "created_at": "2026-10-29 00:25:06",
+  "session_duration_seconds": 12.0,
+  "attendance_summary": {
+    "total_temporary_tracking_ids": 2,
+    "present_count": 2,
+    "absent_count": 0,
+    "attendance_rate_percentage": 100.0,
+    "records": [
+      {
+        "session_id": "cli_demo_session",
+        "participant_id": "Participant_01",
+        "first_seen": 0.0,
+        "last_seen": 8.0,
+        "accumulated_presence_seconds": 8.0,
+        "attendance_status": "PRESENT",
+        "presence_percentage": 66.7,
+        "interval_count": 1,
+        "last_evaluated_at": 7.87
+      },
+      {
+        "session_id": "cli_demo_session",
+        "participant_id": "Participant_02",
+        "first_seen": 1.6,
+        "last_seen": 8.0,
+        "accumulated_presence_seconds": 6.4,
+        "attendance_status": "PRESENT",
+        "presence_percentage": 53.3,
+        "interval_count": 1,
+        "last_evaluated_at": 7.87
+      }
+    ]
+  },
+  "engagement_summary": {
+    "mean_score": 79.9,
+    "median_score": 82.3,
+    "min_score": 50.0,
+    "max_score": 100.0,
+    "std_score": 13.76,
+    "percentage_time_high": 76.9,
+    "percentage_time_moderate": 23.1,
+    "percentage_time_low": 0.0
+  },
+  "audio_summary": {
+    "average_rms": 0.15458,
+    "ambient_noise_floor": 0.07915,
+    "speech_percentage": 29.2,
+    "audio_status": "ANALYZED"
+  },
+  "recommendations": [
+    {
+      "suggestion_id": "REC_01",
+      "trigger_type": "SUDDEN_ENGAGEMENT_DROP",
+      "interval_start": 4.0,
+      "interval_end": 5.0,
+      "title": "Noticeable Drop in Estimated Activity",
+      "observation": "Engagement score dropped by 28.0 points (from 92.5 to 64.5) at t=4.0s.",
+      "suggestion": "Check if an abrupt topic transition occurred or if a visual slide was unclear.",
+      "pedagogical_rationale": "Rapid attention drops often correspond to sudden confusion or complex cognitive overload.",
+      "limitation_note": "Occurs naturally when transitioning between active discussion and quiet note-taking.",
+      "priority": "LOW"
+    },
+    {
+      "suggestion_id": "REC_02",
+      "trigger_type": "HIGH_PARTICIPATION_SURGE",
+      "interval_start": 2.0,
+      "interval_end": 12.0,
+      "title": "High Participant Interaction Segment",
+      "observation": "Sustained high engagement (>80 points) observed with active multimodal presence.",
+      "suggestion": "Note the pedagogical activity or prompt used during this segment as an effective practice to repeat.",
+      "pedagogical_rationale": "Reinforcing proven teaching strategies improves overall course engagement.",
+      "limitation_note": "High activity does not guarantee mastery, but indicates healthy classroom responsiveness.",
+      "priority": "INFO"
+    }
+  ],
+  "metadata": {
+    "application": "ClassPulse AI",
+    "version": "1.0.0",
+    "note": "Tracking identifiers are anonymous session labels, not verified real-world identities. Engagement scores are heuristic approximations for teacher guidance and reflection."
+  }
+}

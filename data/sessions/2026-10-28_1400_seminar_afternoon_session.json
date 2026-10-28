@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.1.0",
+  "session_id": "seminar_afternoon_session",
+  "created_at": "2026-10-29 00:54:30",
+  "session_duration_seconds": 12.0,
+  "attendance_summary": {
+    "total_temporary_tracking_ids": 2,
+    "present_count": 0,
+    "absent_count": 2,
+    "attendance_rate_percentage": 0.0,
+    "records": [
+      {
+        "session_id": "seminar_afternoon_session",
+        "participant_id": "Participant_01",
+        "first_seen": 0.0,
+        "last_seen": 8.0,
+        "accumulated_presence_seconds": 8.0,
+        "required_presence_seconds": 9.0,
+        "attendance_status": "ABSENT",
+        "presence_percentage": 66.7,
+        "absence_reason": "Observed 8.0s / 9.0s required (66.7%).",
+        "interval_count": 1,
+        "last_evaluated_at": 7.87
+      },
+      {
+        "session_id": "seminar_afternoon_session",
+        "participant_id": "Participant_02",
+        "first_seen": 1.6,
+        "last_seen": 8.0,
+        "accumulated_presence_seconds": 6.4,
+        "required_presence_seconds": 9.0,
+        "attendance_status": "ABSENT",
+        "presence_percentage": 53.3,
+        "absence_reason": "Observed 6.4s / 9.0s required (53.3%).",
+        "interval_count": 1,
+        "last_evaluated_at": 7.87
+      }
+    ]
+  },
+  "engagement_summary": {
+    "mean_score": 94.0,
+    "median_score": 98.8,
+    "min_score": 81.2,
+    "max_score": 100.0,
+    "std_score": 7.08,
+    "percentage_time_high": 100.0,
+    "percentage_time_moderate": 0.0,
+    "percentage_time_low": 0.0
+  },
+  "audio_summary": {
+    "average_rms": 0.15458,
+    "ambient_noise_floor": 0.00812,
+    "speech_percentage": 75.0,
+    "audio_status": "ANALYZED"
+  },
+  "recommendations": [
+    {
+      "suggestion_id": "REC_01",
+      "trigger_type": "HIGH_PARTICIPATION_SURGE",
+      "interval_start": 0.0,
+      "interval_end": 13.0,
+      "duration_seconds": 13.0,
+      "title": "High Participant Interaction Segment",
+      "observation": "Sustained high engagement (average 94.0 / 100) observed for 13.0s.",
+      "suggestion": "Note the pedagogical activity or prompt used during this segment as an effective practice to repeat.",
+      "pedagogical_rationale": "Reinforcing proven teaching strategies improves overall course engagement.",
+      "limitation_note": "High activity does not guarantee mastery, but indicates healthy classroom responsiveness.",
+      "priority": "INFO",
+      "confidence": 0.9,
+      "exact_metrics": {
+        "mean_engagement": 94.0,
+        "duration_seconds": 13.0
+      }
+    }
+  ],
+  "metadata": {
+    "application": "ClassPulse AI",
+    "version": "1.0.0",
+    "schema_version": "1.1.0",
+    "note": "Tracking identifiers are anonymous session labels, not verified real-world identities. Engagement scores are heuristic approximations for teacher guidance and reflection."
+  }
+}
