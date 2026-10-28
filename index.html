@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClassPulse AI — Multimodal Classroom Intelligence</title>
+    <title>ClassPulse AI — Multimodal Attendance & Engagement Agent</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0b0f19;
-            --bg-secondary: #111827;
-            --bg-card: #1f2937;
-            --accent-cyan: #06b6d4;
-            --accent-blue: #3b82f6;
-            --accent-emerald: #10b981;
-            --accent-amber: #f59e0b;
-            --accent-rose: #f43f5e;
-            --text-primary: #f9fafb;
-            --text-secondary: #9ca3af;
-            --text-muted: #6b7280;
-            --border-color: #374151;
+            --bg-app: #ffffff;
+            --bg-sidebar: #f8f9fb;
+            --text-color: #31333f;
+            --text-muted: #808495;
+            --border-light: #e6e9ef;
+            --card-bg: #ffffff;
+            --primary-accent: #ff4b4b;
+            --green-pill-bg: #e6f9ed;
+            --green-pill-text: #0e8345;
+            --blue-pill-bg: #e8f4fd;
+            --blue-pill-text: #1d72b8;
+            --purple-pill-bg: #f3e8fd;
+            --purple-pill-text: #6b21a8;
         }
 
         * {
@@ -30,657 +31,689 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Nav */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: rgba(11, 15, 25, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-app);
+            color: var(--text-color);
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo-wrap {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .logo-badge {
-            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
-            color: #fff;
-            font-weight: 800;
-            font-size: 1.1rem;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
-        }
-
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .logo-text span {
-            color: var(--accent-cyan);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1.5rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .btn-gh {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.2s;
-        }
-
-        .btn-gh:hover {
-            background: #2d3748;
-            border-color: var(--accent-cyan);
-            box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
-        }
-
-        /* Hero */
-        .hero {
-            padding: 4rem 2rem 2.5rem;
-            max-width: 1100px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .badge-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.35rem 0.85rem;
-            background: rgba(6, 182, 212, 0.12);
-            border: 1px solid rgba(6, 182, 212, 0.3);
-            border-radius: 9999px;
-            color: var(--accent-cyan);
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            font-weight: 800;
-            line-height: 1.15;
-            letter-spacing: -0.03em;
-            margin-bottom: 1.25rem;
-            background: linear-gradient(135deg, #ffffff 40%, #94a3b8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: var(--text-secondary);
-            max-width: 780px;
-            margin: 0 auto 2rem;
-        }
-
-        /* Demo Grid */
-        .container {
-            max-width: 1150px;
-            margin: 0 auto;
-            padding: 1rem 2rem 5rem;
-        }
-
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 1.75rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        /* Simulator Layout */
-        .simulator-grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 1.5rem;
-        }
-
-        @media (max-width: 860px) {
-            .simulator-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Canvas Mock Screen */
-        .mock-screen {
-            background: #000;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            position: relative;
-            aspect-ratio: 16 / 9;
+            height: 100vh;
             overflow: hidden;
+        }
+
+        /* Top Header Bar */
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-end;
+            padding: 0 1.5rem;
+            z-index: 100;
         }
 
-        #faceCanvas {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .screen-overlay {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            display: flex;
-            gap: 8px;
-        }
-
-        .screen-pill {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 4px 10px;
+        .deploy-badge {
+            background: #f0f2f6;
+            color: #31333f;
+            padding: 4px 12px;
             border-radius: 6px;
-            font-size: 0.75rem;
-            font-family: 'JetBrains Mono', monospace;
-            color: #4ade80;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #dcdfe6;
+            transition: background 0.15s;
         }
 
-        /* Controls */
-        .controls-panel {
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 1.25rem;
+        .deploy-badge:hover {
+            background: #e4e7ed;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: calc(100vh - 50px);
+            margin-top: 50px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            min-width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-light);
+            padding: 1.5rem 1rem;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
         }
 
-        .slider-group label {
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sidebar-brand-icon {
+            font-size: 1.5rem;
+        }
+
+        .sidebar-brand-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #262730;
+        }
+
+        .sidebar-version {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .sidebar-session-info {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+        }
+
+        .sidebar-session-info .label {
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .sidebar-session-info .val {
+            color: #10b981;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+
+        .nav-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .nav-item:hover {
+            background: #f0f2f6;
+        }
+
+        .nav-item.active {
+            background: #e8f4fd;
+            color: #1d72b8;
+            font-weight: 600;
+        }
+
+        .nav-bullet {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #b2b8c5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item.active .nav-bullet {
+            border-color: #1d72b8;
+        }
+
+        .nav-item.active .nav-bullet::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #1d72b8;
+        }
+
+        .param-section {
+            border-top: 1px solid var(--border-light);
+            padding-top: 1.25rem;
+        }
+
+        .slider-wrap {
+            margin-bottom: 1rem;
+        }
+
+        .slider-wrap label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .slider-wrap input[type="range"] {
+            width: 100%;
+            accent-color: #ff4b4b;
+        }
+
+        /* Main View */
+        .main-content {
+            flex: 1;
+            padding: 2rem 2.5rem;
+            overflow-y: auto;
+            background: #ffffff;
+        }
+
+        /* Banner Card */
+        .hero-banner {
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 1.75rem 2rem;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            margin-bottom: 1.75rem;
+        }
+
+        .banner-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .brand-headline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-headline h1 {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #262730;
+        }
+
+        .brand-version-chip {
+            background: #f0f2f6;
+            color: #555869;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 10px;
+        }
+
+        .banner-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status-pill {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-pill.ready {
+            background: var(--green-pill-bg);
+            color: var(--green-pill-text);
+        }
+
+        .status-pill.local {
+            background: var(--blue-pill-bg);
+            color: var(--blue-pill-text);
+        }
+
+        .status-pill.bimodal {
+            background: var(--purple-pill-bg);
+            color: var(--purple-pill-text);
+        }
+
+        .banner-sub {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* KPI Grid */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .kpi-card {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 1.1rem 0.75rem;
+            text-align: center;
+            background: #ffffff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .kpi-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.35rem;
+        }
+
+        .kpi-number {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #262730;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .session-caption {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1.75rem;
+        }
+
+        /* 3-Column Feature Cards */
+        .feature-columns {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .action-box {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            background: #ffffff;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .action-box-icon {
+            font-size: 1.4rem;
+        }
+
+        .action-box h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #262730;
+        }
+
+        .action-box p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Interactive Simulator */
+        .interactive-section {
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            padding: 1.5rem;
+            background: #fafbfc;
+            margin-top: 1.5rem;
+        }
+
+        .interactive-section h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #262730;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .interactive-section p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .interactive-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media(max-width: 900px) {
+            .interactive-controls {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .sim-slider-box {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .sim-slider-box label {
             display: flex;
             justify-content: space-between;
             font-size: 0.85rem;
             font-weight: 600;
-            margin-bottom: 0.35rem;
-            color: var(--text-secondary);
+            margin-bottom: 6px;
         }
 
-        .slider-group input[type="range"] {
+        .sim-slider-box input[type="range"] {
             width: 100%;
-            accent-color: var(--accent-cyan);
-            cursor: pointer;
+            accent-color: #ff4b4b;
         }
 
-        /* Metrics Output */
-        .metrics-row {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .metric-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+        .pedagogical-result {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-left: 4px solid #1d72b8;
+            border-radius: 6px;
             padding: 1rem;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        .metric-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .metric-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-top: 0.25rem;
-            font-family: 'JetBrains Mono', monospace;
-            color: var(--accent-cyan);
-        }
-
-        /* Suggestion Box */
-        .suggestion-box {
-            background: rgba(6, 182, 212, 0.08);
-            border-left: 4px solid var(--accent-cyan);
-            padding: 1rem;
-            border-radius: 0 8px 8px 0;
-            margin-top: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .suggestion-title {
-            font-weight: 700;
-            color: var(--accent-cyan);
-            margin-bottom: 0.25rem;
-        }
-
-        /* Feature Cards */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .feature-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-cyan);
-        }
-
-        .feature-icon {
-            font-size: 1.75rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .feature-card p {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        /* Footer */
-        footer {
-            border-top: 1px solid var(--border-color);
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-muted);
+        .pedagogical-result-title {
             font-size: 0.85rem;
+            font-weight: 700;
+            color: #1d72b8;
+        }
+
+        .pedagogical-result-text {
+            font-size: 0.85rem;
+            color: var(--text-color);
+        }
+
+        /* Expander */
+        .accordion-bar {
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            background: #ffffff;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #262730;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .accordion-bar:hover {
+            background: #f8f9fb;
         }
     </style>
 </head>
 <body>
 
-    <!-- Nav -->
-    <nav>
-        <a href="#" class="logo-wrap">
-            <div class="logo-badge">CP</div>
-            <div class="logo-text">ClassPulse<span>AI</span></div>
+    <!-- Top Streamlit-style Navbar -->
+    <header class="top-navbar">
+        <a href="https://github.com/arpanmishra200516-png/ClassPulseAI" target="_blank" class="deploy-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub Repository
         </a>
-        <div class="nav-links">
-            <a href="#simulator">Live Simulator</a>
-            <a href="#features">Architecture</a>
-            <a href="https://github.com/arpanmishra200516-png/ClassPulseAI" target="_blank" class="btn-gh">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                View on GitHub
-            </a>
-        </div>
-    </nav>
-
-    <!-- Hero -->
-    <header class="hero">
-        <div class="badge-pill">
-            <span>●</span> 100% Offline • Zero Biometrics • Explainable AI
-        </div>
-        <h1>Multimodal Classroom Attendance & Engagement Agent</h1>
-        <p>
-            An autonomous AI pipeline fusing <strong>MediaPipe BlazeFace tracking</strong> and <strong>acoustic signal analysis</strong> to automate presence-based attendance and pedagogical suggestions without cloud APIs.
-        </p>
     </header>
 
-    <!-- Main Container -->
-    <main class="container">
-        
-        <!-- Live Interactive Simulator -->
-        <section id="simulator" class="card">
-            <div class="card-header">
-                <div class="card-title">
-                    <span>⚡</span> Interactive Multimodal Engine Simulator
+    <div class="app-container">
+        <!-- Streamlit Left Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <span class="sidebar-brand-icon">🎓</span>
+                <div>
+                    <div class="sidebar-brand-title">ClassPulse AI</div>
+                    <div class="sidebar-version">v1.0.0 | Schema v1.1.0 | 100% Offline</div>
                 </div>
-                <span style="font-size: 0.85rem; color: var(--accent-emerald); font-family: 'JetBrains Mono', monospace;">STATUS: RUNNING</span>
             </div>
 
-            <div class="simulator-grid">
-                <!-- Visual Mock Stream -->
-                <div class="mock-screen">
-                    <canvas id="faceCanvas" width="640" height="360"></canvas>
-                    <div class="screen-overlay">
-                        <span class="screen-pill" id="screenFps">30 FPS</span>
-                        <span class="screen-pill" id="screenActiveFaces">Tracked: 4 faces</span>
-                        <span class="screen-pill" style="color: var(--accent-cyan);">MediaPipe Active</span>
+            <div class="sidebar-session-info">
+                <div class="label">Currently loaded session:</div>
+                <div class="val">e2e_test_session</div>
+            </div>
+
+            <div>
+                <div class="nav-header">Navigation</div>
+                <ul class="nav-list">
+                    <li class="nav-item active"><span class="nav-bullet"></span> ⭐ Overview & Mission</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 🚀 Live & Video Processing</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 📋 Attendance Verification</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 🎙️ Acoustic Activity (VAD)</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 📊 Multimodal Engagement</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 💡 Teaching Suggestions</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 🗃️ Session Archive & Compare</li>
+                    <li class="nav-item"><span class="nav-bullet"></span> 📥 Reports & Downloads</li>
+                </ul>
+            </div>
+
+            <div class="param-section">
+                <div class="nav-header">⚙️ Parameter Controls</div>
+                <div class="slider-wrap">
+                    <label><span>Required Presence (%)</span><span id="sidePresenceVal">60%</span></label>
+                    <input type="range" id="sidePresence" min="30" max="90" value="60">
+                </div>
+                <div class="slider-wrap">
+                    <label><span>Detection Gap Tolerance (s)</span><span>2.50</span></label>
+                    <input type="range" min="1" max="5" step="0.5" value="2.5">
+                </div>
+                <div class="slider-wrap">
+                    <label><span>Expected Cohort Size</span><span id="sideCohortVal">2</span></label>
+                    <input type="range" id="sideCohort" min="1" max="10" value="2">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Streamlit Content Body -->
+        <main class="main-content">
+            
+            <!-- Hero Banner -->
+            <section class="hero-banner">
+                <div class="banner-header">
+                    <div class="brand-headline">
+                        <span style="font-size: 2rem;">🎓</span>
+                        <h1>ClassPulse AI</h1>
+                        <span class="brand-version-chip">v1.0.0</span>
+                    </div>
+                    <div class="banner-pills">
+                        <span class="status-pill ready">● Engine Ready</span>
+                        <span class="status-pill local">100% On-Device / Local</span>
+                        <span class="status-pill bimodal">⚡ Bimodal (Vision + Audio)</span>
                     </div>
                 </div>
+                <p class="banner-sub">Multimodal Attendance & Engagement Agent</p>
+            </section>
 
-                <!-- Live Control Inputs -->
-                <div class="controls-panel">
-                    <div class="slider-group">
+            <!-- Top KPI Cards -->
+            <section class="kpi-row">
+                <div class="kpi-card">
+                    <div class="kpi-title">PARTICIPANTS</div>
+                    <div class="kpi-number" id="kpiParticipants">2</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">CONFIRMED PRESENT</div>
+                    <div class="kpi-number" id="kpiConfirmed" style="color: #0e8345;">2</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">ATTENDANCE %</div>
+                    <div class="kpi-number" id="kpiAttendance" style="color: #1d72b8;">100.0%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">MEAN ENGAGEMENT</div>
+                    <div class="kpi-number" id="kpiEngagement">84.5</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">SPEECH RATIO</div>
+                    <div class="kpi-number" id="kpiSpeech">75.0%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-title">NOISE FLOOR (RMS)</div>
+                    <div class="kpi-number" style="font-family: 'JetBrains Mono', monospace; font-size: 1.3rem; margin-top: 5px;">0.0081</div>
+                </div>
+            </section>
+            <div class="session-caption">Showing: e2e_test_session</div>
+
+            <!-- 3 Column Feature Cards -->
+            <section class="feature-columns">
+                <div class="action-box">
+                    <span class="action-box-icon">📹</span>
+                    <h3>1. Capture & Video</h3>
+                    <p>Analyze high-definition recorded classroom videos (MP4/MKV) or connect live webcam streams with automated frame skipping and audio extraction.</p>
+                </div>
+                <div class="action-box">
+                    <span class="action-box-icon">📋</span>
+                    <h3>2. Attendance Verification</h3>
+                    <p>Track accumulated student presence against relative duration thresholds. Consolidates fragmented tracks and weeds out transient false positives.</p>
+                </div>
+                <div class="action-box">
+                    <span class="action-box-icon">💡</span>
+                    <h3>3. Multimodal Analytics</h3>
+                    <p>Fuse 1.0s video and acoustic observations into explainable engagement indicators and actionable pedagogical suggestions for reflective teaching.</p>
+                </div>
+            </section>
+
+            <!-- Expander Accordion -->
+            <div class="accordion-bar">
+                <span>›</span> System Architecture, Educational Mission & Privacy Safeguards
+            </div>
+
+            <!-- Live Interactive Engagement Tester -->
+            <section class="interactive-section">
+                <h4><span>⚡</span> Live Multimodal Engagement Simulator</h4>
+                <p>Adjust these real-time signals to observe how the multimodal algorithm computes the exact 0–100 index and updates instructor suggestions.</p>
+
+                <div class="interactive-controls">
+                    <div class="sim-slider-box">
                         <label>
-                            <span>Visible Student Ratio</span>
-                            <span id="facesVal">4 / 5 (80%)</span>
+                            <span>Student Presence Count</span>
+                            <span id="simPresenceLabel">2 / 2 Present</span>
                         </label>
-                        <input type="range" id="facesSlider" min="0" max="5" value="4">
+                        <input type="range" id="simPresence" min="0" max="2" value="2">
+
+                        <label style="margin-top: 12px;">
+                            <span>Acoustic Interaction (Speech SNR)</span>
+                            <span id="simAudioLabel">75% (Active Dialogue)</span>
+                        </label>
+                        <input type="range" id="simAudio" min="0" max="100" value="75">
                     </div>
 
-                    <div class="slider-group">
-                        <label>
-                            <span>Micro-Movement (Note-taking/Nodding)</span>
-                            <span id="motionVal">Natural (15 px/s)</span>
-                        </label>
-                        <input type="range" id="motionSlider" min="0" max="100" value="25">
-                    </div>
-
-                    <div class="slider-group">
-                        <label>
-                            <span>Acoustic Speech & Interaction SNR</span>
-                            <span id="audioVal">Active Vocal Speech (18 dB)</span>
-                        </label>
-                        <input type="range" id="audioSlider" min="0" max="100" value="70">
-                    </div>
-
-                    <div class="slider-group">
-                        <label>
-                            <span>Required Attendance Threshold</span>
-                            <span id="thresholdVal">60% of Session</span>
-                        </label>
-                        <input type="range" id="thresholdSlider" min="30" max="90" value="60">
+                    <div class="pedagogical-result">
+                        <div class="pedagogical-result-title" id="recBadge">💡 Pedagogical Suggestion</div>
+                        <div class="pedagogical-result-text" id="recContent">
+                            High classroom participation and active vocal discussion detected. Maintain current interactive lecture pacing.
+                        </div>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <!-- Dynamic Real-Time Metric Indicators -->
-            <div class="metrics-row">
-                <div class="metric-card">
-                    <div class="metric-label">Fused Engagement Index</div>
-                    <div class="metric-value" id="fusedScore">84.2</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Presence Attendance Status</div>
-                    <div class="metric-value" id="attendanceStatus" style="color: var(--accent-emerald);">PRESENT</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-label">Voice Activity (VAD)</div>
-                    <div class="metric-value" id="vadStatus" style="color: var(--accent-cyan);">SPEECH</div>
-                </div>
-            </div>
+        </main>
+    </div>
 
-            <!-- Contextual Agent Recommendation Box -->
-            <div class="suggestion-box">
-                <div class="suggestion-title" id="recTitle">💡 Pedagogical Agent Suggestion</div>
-                <div id="recText">High interactive engagement and healthy room dynamics observed. Maintain current discussion-driven pacing.</div>
-            </div>
-        </section>
-
-        <!-- Technical Architecture Overview -->
-        <section id="features">
-            <h2 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 1rem; text-align: center;">Core Architecture & Technical Specifications</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">👁️</div>
-                    <h3>Cumulative Presence Attendance</h3>
-                    <p>Replaces flawed single-frame scans with accumulated time observation. Requires $\ge 60\%$ verified presence with temporal gap-tolerance merging.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🎙️</div>
-                    <h3>Acoustic Floor & VAD</h3>
-                    <p>Computes RMS signal energy and a rolling 10th-percentile noise floor unaffected by loud speech, coupled with hangover buffering.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>100% Privacy-Preserving</h3>
-                    <p>Uses IoU/Centroid anonymous tracking (<code>Participant_01</code>). No biometric face encodings or identifiable photos are ever stored.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Explainable Engagement Scoring</h3>
-                    <p>Transparent 0–100 heuristic fusion balancing visual presence (40%), natural movement (25%), and acoustic dialogue (35%).</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <p>ClassPulse AI • Developed by Arpan Mishra • Open Source MIT License</p>
-        <p style="margin-top: 0.5rem;">Repository: <a href="https://github.com/arpanmishra200516-png/ClassPulseAI" style="color: var(--accent-cyan); text-decoration: none;">github.com/arpanmishra200516-png/ClassPulseAI</a></p>
-    </footer>
-
-    <!-- Interactive Simulator Script -->
+    <!-- Script for Live Interaction -->
     <script>
-        const canvas = document.getElementById('faceCanvas');
-        const ctx = canvas.getContext('2d');
+        const simPresence = document.getElementById('simPresence');
+        const simAudio = document.getElementById('simAudio');
+        const sidePresence = document.getElementById('sidePresence');
+        const sidePresenceVal = document.getElementById('sidePresenceVal');
+        const sideCohort = document.getElementById('sideCohort');
+        const sideCohortVal = document.getElementById('sideCohortVal');
 
-        const facesSlider = document.getElementById('facesSlider');
-        const motionSlider = document.getElementById('motionSlider');
-        const audioSlider = document.getElementById('audioSlider');
-        const thresholdSlider = document.getElementById('thresholdSlider');
+        const kpiParticipants = document.getElementById('kpiParticipants');
+        const kpiConfirmed = document.getElementById('kpiConfirmed');
+        const kpiAttendance = document.getElementById('kpiAttendance');
+        const kpiEngagement = document.getElementById('kpiEngagement');
+        const kpiSpeech = document.getElementById('kpiSpeech');
 
-        const facesVal = document.getElementById('facesVal');
-        const motionVal = document.getElementById('motionVal');
-        const audioVal = document.getElementById('audioVal');
-        const thresholdVal = document.getElementById('thresholdVal');
+        const simPresenceLabel = document.getElementById('simPresenceLabel');
+        const simAudioLabel = document.getElementById('simAudioLabel');
+        const recBadge = document.getElementById('recBadge');
+        const recContent = document.getElementById('recContent');
 
-        const fusedScore = document.getElementById('fusedScore');
-        const attendanceStatus = document.getElementById('attendanceStatus');
-        const vadStatus = document.getElementById('vadStatus');
-        const screenActiveFaces = document.getElementById('screenActiveFaces');
-        const recTitle = document.getElementById('recTitle');
-        const recText = document.getElementById('recText');
+        function updateAll() {
+            const cohort = parseInt(sideCohort.value);
+            sideCohortVal.innerText = cohort;
+            simPresence.max = cohort;
 
-        // Bounding boxes for demo
-        const defaultBoxes = [
-            { x: 70, y: 100, w: 90, h: 120, label: 'Participant_01' },
-            { x: 190, y: 90, w: 90, h: 120, label: 'Participant_02' },
-            { x: 340, y: 110, w: 90, h: 120, label: 'Participant_03' },
-            { x: 470, y: 95, w: 90, h: 120, label: 'Participant_04' },
-            { x: 260, y: 170, w: 90, h: 120, label: 'Participant_05' }
-        ];
+            const present = parseInt(simPresence.value);
+            const audio = parseInt(simAudio.value);
+            const reqRatio = parseInt(sidePresence.value);
+            sidePresenceVal.innerText = `${reqRatio}%`;
 
-        let tick = 0;
+            simPresenceLabel.innerText = `${present} / ${cohort} Present`;
+            simAudioLabel.innerText = `${audio}% (${audio > 50 ? 'Active Dialogue' : audio > 25 ? 'Quiet Room' : 'Background Noise'})`;
 
-        function renderCanvas() {
-            ctx.fillStyle = '#080c14';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            kpiParticipants.innerText = cohort;
+            kpiConfirmed.innerText = present;
 
-            // Draw grid
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-            ctx.lineWidth = 1;
-            for(let x = 0; x < canvas.width; x += 40) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-            for(let y = 0; y < canvas.height; y += 40) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
+            const attPct = (present / cohort) * 100;
+            kpiAttendance.innerText = `${attPct.toFixed(1)}%`;
+            kpiSpeech.innerText = `${audio.toFixed(1)}%`;
 
-            const activeCount = parseInt(facesSlider.value);
-            const motionMagnitude = parseInt(motionSlider.value) * 0.08;
-
-            for (let i = 0; i < activeCount; i++) {
-                const b = defaultBoxes[i];
-                const jitterX = Math.sin(tick * 0.05 + i) * motionMagnitude;
-                const jitterY = Math.cos(tick * 0.04 + i) * motionMagnitude;
-
-                const curX = b.x + jitterX;
-                const curY = b.y + jitterY;
-
-                // Box
-                ctx.strokeStyle = '#06b6d4';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(curX, curY, b.w, b.h);
-
-                // Label pill
-                ctx.fillStyle = 'rgba(6, 182, 212, 0.85)';
-                ctx.fillRect(curX, curY - 22, b.w, 20);
-
-                ctx.fillStyle = '#ffffff';
-                ctx.font = '600 11px Inter, sans-serif';
-                ctx.fillText(b.label, curX + 6, curY - 8);
-
-                // Landmark points
-                ctx.fillStyle = '#38bdf8';
-                ctx.beginPath();
-                ctx.arc(curX + 30, curY + 45, 3, 0, Math.PI * 2);
-                ctx.arc(curX + 60, curY + 45, 3, 0, Math.PI * 2);
-                ctx.arc(curX + 45, curY + 65, 2.5, 0, Math.PI * 2);
-                ctx.arc(curX + 45, curY + 90, 4, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            tick++;
-            requestAnimationFrame(renderCanvas);
-        }
-
-        function updateMetrics() {
-            const faces = parseInt(facesSlider.value);
-            const motion = parseInt(motionSlider.value);
-            const audio = parseInt(audioSlider.value);
-            const threshold = parseInt(thresholdSlider.value);
-
-            // Labels
-            facesVal.innerText = `${faces} / 5 (${(faces / 5 * 100).toFixed(0)}%)`;
-            screenActiveFaces.innerText = `Tracked: ${faces} face${faces !== 1 ? 's' : ''}`;
-
-            if (motion < 10) motionVal.innerText = `Static Stillness (${motion} px/s)`;
-            else if (motion > 75) motionVal.innerText = `Erratic Rapid Movement (${motion} px/s)`;
-            else motionVal.innerText = `Natural Dynamics (${motion} px/s)`;
-
-            if (audio > 50) {
-                audioVal.innerText = `Active Speech Interaction (${audio}%)`;
-                vadStatus.innerText = 'SPEECH';
-                vadStatus.style.color = 'var(--accent-cyan)';
-            } else if (audio > 25) {
-                audioVal.innerText = `Attentive Silence (${audio}%)`;
-                vadStatus.innerText = 'QUIET';
-                vadStatus.style.color = 'var(--accent-emerald)';
-            } else {
-                audioVal.innerText = `Distracting Background Noise (${audio}%)`;
-                vadStatus.innerText = 'NOISY';
-                vadStatus.style.color = 'var(--accent-rose)';
-            }
-
-            thresholdVal.innerText = `${threshold}% of Session`;
-
-            // Engagement Calculation: w_v=0.40, w_m=0.25, w_a=0.35
-            const sPres = (faces / 5) * 100;
-            let sMov = 95;
-            if (motion < 10) sMov = 35;
-            else if (motion > 75) sMov = 55;
-
+            // Score formula: 0.40 * presence + 0.25 * movement + 0.35 * audio
+            const sPres = attPct;
+            const sMov = 90;
             let sAud = 60;
-            if (audio > 50) sAud = 85 + (audio - 50) * 0.3;
+            if (audio > 50) sAud = 80 + (audio - 50) * 0.4;
             else if (audio < 25) sAud = 30;
 
             const score = (0.40 * sPres + 0.25 * sMov + 0.35 * sAud).toFixed(1);
-            fusedScore.innerText = score;
+            kpiEngagement.innerText = score;
 
-            // Attendance check
-            const presenceRatio = (faces / 5) * 100;
-            if (presenceRatio >= threshold) {
-                attendanceStatus.innerText = 'PRESENT';
-                attendanceStatus.style.color = 'var(--accent-emerald)';
-            } else {
-                attendanceStatus.innerText = `ABSENT (${presenceRatio.toFixed(0)}% < ${threshold}%)`;
-                attendanceStatus.style.color = 'var(--accent-rose)';
-            }
-
-            // Recommendations
             if (score < 45) {
-                recTitle.innerText = '⚠️ Intervention Suggested';
-                recTitle.style.color = 'var(--accent-amber)';
-                recText.innerText = 'Low engagement detected for over 6 seconds. Consider introducing an interactive think-pair-share or concept check poll.';
+                recBadge.innerText = '⚠️ Intervention Suggested';
+                recBadge.style.color = '#e11d48';
+                recContent.innerText = 'Sustained low engagement detected. Consider introducing a concept check poll or think-pair-share activity.';
             } else if (audio < 20) {
-                recTitle.innerText = '🎙️ Acoustic Notice';
-                recTitle.style.color = 'var(--accent-rose)';
-                recText.innerText = 'High background ambient noise observed without student speech. Check classroom acoustic conditions.';
+                recBadge.innerText = '🎙️ Elevated Ambient Noise';
+                recBadge.style.color = '#f59e0b';
+                recContent.innerText = 'Elevated background noise detected without student dialogue. Inspect microphone placement and room dynamics.';
             } else if (score >= 80) {
-                recTitle.innerText = '⭐ Participation Surge';
-                recTitle.style.color = 'var(--accent-emerald)';
-                recText.innerText = 'High student engagement and active dialogue observed. Note this instructional strategy for future lectures.';
+                recBadge.innerText = '⭐ Participation Surge';
+                recBadge.style.color = '#0e8345';
+                recContent.innerText = 'High student engagement and active dialogue observed. Note this instructional strategy for repeatable teaching practice.';
             } else {
-                recTitle.innerText = '💡 Pedagogical Agent Suggestion';
-                recTitle.style.color = 'var(--accent-cyan)';
-                recText.innerText = 'Classroom dynamics are balanced. Engagement index is steady across current discussion.';
+                recBadge.innerText = '💡 Pedagogical Suggestion';
+                recBadge.style.color = '#1d72b8';
+                recContent.innerText = 'Classroom dynamics are well-balanced with stable attendance and healthy interaction levels.';
             }
         }
 
-        facesSlider.addEventListener('input', updateMetrics);
-        motionSlider.addEventListener('input', updateMetrics);
-        audioSlider.addEventListener('input', updateMetrics);
-        thresholdSlider.addEventListener('input', updateMetrics);
+        simPresence.addEventListener('input', updateAll);
+        simAudio.addEventListener('input', updateAll);
+        sidePresence.addEventListener('input', updateAll);
+        sideCohort.addEventListener('input', updateAll);
 
-        updateMetrics();
-        renderCanvas();
+        updateAll();
     </script>
 </body>
 </html>
