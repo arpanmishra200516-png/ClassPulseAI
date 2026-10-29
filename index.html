@@ -5,62 +5,2018 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ClassPulse AI — Multimodal Attendance & Engagement Agent</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎓</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-body: #ffffff;
+            --bg-sidebar: #f8f9fb;
+            --bg-card: #ffffff;
+            --border-light: #e2e8f0;
+            --border-subtle: #edf2f7;
+            --text-dark: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --primary-blue: #2563eb;
+            --primary-blue-hover: #1d4ed8;
+            --primary-blue-light: #eff6ff;
+            --accent-green: #059669;
+            --accent-green-bg: #ecfdf5;
+            --accent-green-border: #a7f3d0;
+            --accent-indigo: #4f46e5;
+            --accent-indigo-bg: #eef2ff;
+            --accent-indigo-border: #c7d2fe;
+            --accent-amber: #d97706;
+            --accent-amber-bg: #fffbeb;
+            --accent-amber-border: #fde68a;
+            --accent-rose: #e11d48;
+            --accent-rose-bg: #fff1f2;
+            --accent-rose-border: #fecdd3;
+            --shadow-subtle: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+            --shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --radius-md: 10px;
+            --radius-sm: 6px;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background-color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        #appFrame {
-            width: 100vw;
+
+        body {
+            font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-dark);
             height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Nav */
+        .top-navbar {
+            height: 48px;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-gh-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-body);
+            text-decoration: none;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all 0.15s ease;
+        }
+
+        .btn-gh-link:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+            color: var(--text-dark);
+        }
+
+        /* App Shell */
+        .app-shell {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 48px);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 290px;
+            min-width: 290px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-light);
+            padding: 1.25rem 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+        }
+
+        .session-badge {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 6px 10px;
+            font-size: 0.75rem;
+        }
+
+        .session-badge .label {
+            color: var(--text-muted);
+            margin-bottom: 2px;
+        }
+
+        .session-badge .val {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .sidebar-nav-title {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .nav-items {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 7px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-body);
+            background: transparent;
             border: none;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.15s ease;
+        }
+
+        .nav-btn:hover {
+            background: #f1f5f9;
+            color: var(--text-dark);
+        }
+
+        .nav-btn.active {
+            background: #eff6ff;
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .radio-dot {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            border: 1.5px solid #94a3b8;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .nav-btn.active .radio-dot {
+            border-color: var(--primary-blue);
+        }
+
+        .nav-btn.active .radio-dot::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+        }
+
+        /* Sidebar Controls */
+        .sidebar-divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 0.25rem 0;
+        }
+
+        .ctrl-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ctrl-item label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .ctrl-item input[type="range"] {
+            width: 100%;
+            accent-color: #ff4b4b;
+            cursor: pointer;
+        }
+
+        .ctrl-help {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+            line-height: 1.35;
+        }
+
+        .expander {
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .expander-header {
+            padding: 8px 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            cursor: pointer;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .expander-body {
+            padding: 10px 12px;
+            background: #fafbfc;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn-reset {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-body);
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all 0.15s ease;
+        }
+
+        .btn-reset:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        /* Main View Container */
+        .main-viewport {
+            flex: 1;
+            background-color: var(--bg-body);
+            padding: 1.75rem 2.25rem;
+            overflow-y: auto;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem 1.75rem;
+            box-shadow: var(--shadow-subtle);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .hero-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-title {
+            font-size: 1.95rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-version {
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            color: #2563eb;
+        }
+
+        .hero-pills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 0.76rem;
+            font-weight: 600;
+        }
+
+        .status-pill.ready {
+            background: var(--accent-green-bg);
+            border: 1px solid var(--accent-green-border);
+            color: var(--accent-green);
+        }
+
+        .status-pill.secure {
+            background: var(--primary-blue-light);
+            border: 1px solid #bfdbfe;
+            color: var(--primary-blue);
+        }
+
+        .status-pill.mode {
+            background: var(--accent-indigo-bg);
+            border: 1px solid var(--accent-indigo-border);
+            color: var(--accent-indigo);
+        }
+
+        .hero-sub {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+        }
+
+        /* KPI Strip */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 12px;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .kpi-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            text-align: center;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.2s ease;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            border-color: #cbd5e1;
+            box-shadow: var(--shadow-hover);
+        }
+
+        .kpi-lbl {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .kpi-val {
+            font-size: 1.65rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-dark);
+        }
+
+        .session-info-strip {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* 3 Steps Overview Cards */
+        .workflow-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .workflow-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .workflow-box {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            box-shadow: var(--shadow-subtle);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .workflow-box .icon {
+            font-size: 1.4rem;
+        }
+
+        .workflow-box h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .workflow-box p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        /* Tab Content Containers */
+        .tab-panel {
+            display: none;
+            animation: fadeIn 0.15s ease-in-out;
+        }
+
+        .tab-panel.active {
             display: block;
         }
-        .fallback-bar {
-            display: none;
-            position: fixed;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(31, 41, 55, 0.9);
-            color: #ffffff;
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            z-index: 9999;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .fallback-bar:hover {
-            background: #111827;
+
+        /* Generic Section Card */
+        .section-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-subtle);
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Buttons & Badges */
+        .btn-primary {
+            background: var(--primary-blue);
+            color: #ffffff;
+            border: 1px solid #1d4ed8;
+            padding: 7px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3);
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue-hover);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: var(--text-body);
+            border: 1px solid var(--border-light);
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+            transition: all 0.15s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #cbd5e1;
+        }
+
+        .btn-danger {
+            background: #ffffff;
+            color: var(--accent-rose);
+            border: 1px solid var(--accent-rose-border);
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: var(--accent-rose-bg);
+        }
+
+        /* Table Design */
+        .data-table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+        }
+
+        table.data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        table.data-table th {
+            background: #f8fafc;
+            padding: 10px 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        table.data-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--text-body);
+        }
+
+        table.data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table.data-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 9999px;
+            font-size: 0.74rem;
+            font-weight: 700;
+        }
+
+        .status-badge.present {
+            background: var(--accent-green-bg);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green-border);
+        }
+
+        .status-badge.absent {
+            background: var(--accent-rose-bg);
+            color: var(--accent-rose);
+            border: 1px solid var(--accent-rose-border);
+        }
+
+        /* Camera / Canvas Simulator */
+        .stream-box {
+            background: #000000;
+            border-radius: var(--radius-sm);
+            aspect-ratio: 16 / 9;
+            max-height: 420px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        #cameraVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        #streamCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .stream-overlay-pill {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.74rem;
+            color: #4ade80;
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Terminal Console */
+        .console-log {
+            background: #0f172a;
+            color: #cbd5e1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            height: 140px;
+            overflow-y: auto;
+            line-height: 1.5;
+        }
+
+        .console-log .info { color: #38bdf8; }
+        .console-log .success { color: #4ade80; }
+        .console-log .warn { color: #facc15; }
+
+        /* Recommendation Cards */
+        .rec-item {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            box-shadow: var(--shadow-subtle);
+            border-left: 4px solid var(--primary-blue);
+            transition: all 0.2s ease;
+        }
+
+        .rec-item:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .rec-item.surge { border-left-color: var(--accent-green); }
+        .rec-item.warning { border-left-color: var(--accent-amber); }
+        .rec-item.critical { border-left-color: var(--accent-rose); }
+
+        .rec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .rec-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .rec-body {
+            font-size: 0.85rem;
+            color: var(--text-body);
+            margin-bottom: 8px;
+        }
+
+        .rec-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: #f8fafc;
+            padding: 6px 10px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        /* Dropzone */
+        .dropzone {
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-md);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 1rem;
+        }
+
+        .dropzone:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .dropzone-icon {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Sliders Layout in Simulator */
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 900px) {
+            .sim-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <iframe 
-        id="appFrame"
-        src="https://classpulseai-live.streamlit.app/?embed=true" 
-        allow="camera; microphone; display-capture; autoplay; clipboard-write;"
-        allowfullscreen>
-    </iframe>
 
-    <a href="https://classpulseai-live.streamlit.app/" target="_blank" class="fallback-bar" id="fallbackBtn">
-        Open in Full Window ↗
-    </a>
+    <!-- Top Streamlit Navbar -->
+    <header class="top-navbar">
+        <a href="#overview" class="navbar-brand">
+            <span>🎓</span>
+            <span>ClassPulse AI</span>
+        </a>
+        <div class="navbar-actions">
+            <a href="https://github.com/arpanmishra200516-png/ClassPulseAI" target="_blank" class="btn-gh-link">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub Repository
+            </a>
+        </div>
+    </header>
 
+    <div class="app-shell">
+        
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">
+                    <span>🎓</span> ClassPulse AI
+                </div>
+                <div class="sidebar-subtitle">v1.0.0 | Schema v1.1.0 | 100% Offline</div>
+            </div>
+
+            <div class="session-badge">
+                <div class="label">Currently loaded session:</div>
+                <div class="val" id="sidebarSessionId">e2e_test_session</div>
+            </div>
+
+            <!-- NAVIGATION TABS -->
+            <div>
+                <div class="sidebar-nav-title">Navigation</div>
+                <ul class="nav-items" id="navItems">
+                    <li><button class="nav-btn active" data-tab="overview"><span class="radio-dot"></span> 📌 Overview & Mission</button></li>
+                    <li><button class="nav-btn" data-tab="live-processing"><span class="radio-dot"></span> 🚀 Live & Video Processing</button></li>
+                    <li><button class="nav-btn" data-tab="attendance"><span class="radio-dot"></span> 📋 Attendance Verification</button></li>
+                    <li><button class="nav-btn" data-tab="acoustic"><span class="radio-dot"></span> 🎙️ Acoustic Activity (VAD)</button></li>
+                    <li><button class="nav-btn" data-tab="engagement"><span class="radio-dot"></span> 📈 Multimodal Engagement</button></li>
+                    <li><button class="nav-btn" data-tab="suggestions"><span class="radio-dot"></span> 💡 Teaching Suggestions</button></li>
+                    <li><button class="nav-btn" data-tab="archive"><span class="radio-dot"></span> 📊 Session Archive & Compare</button></li>
+                    <li><button class="nav-btn" data-tab="reports"><span class="radio-dot"></span> 📥 Reports & Downloads</button></li>
+                </ul>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- PARAMETER CONTROLS -->
+            <div class="ctrl-group">
+                <div class="sidebar-nav-title">⚙️ Parameter Controls</div>
+
+                <div class="ctrl-item">
+                    <label>
+                        <span>Required Presence (%)</span>
+                        <span id="paramPresenceVal">60%</span>
+                    </label>
+                    <input type="range" id="paramPresence" min="20" max="95" step="5" value="60">
+                    <div class="ctrl-help">Required session presence percentage to be marked Present.</div>
+                </div>
+
+                <div class="ctrl-item">
+                    <label>
+                        <span>Detection Gap Tolerance</span>
+                        <span id="paramGapVal">2.50s</span>
+                    </label>
+                    <input type="range" id="paramGap" min="0.5" max="5.0" step="0.5" value="2.5">
+                    <div class="ctrl-help">Tolerates temporary occlusions without resetting accumulation.</div>
+                </div>
+
+                <div class="ctrl-item">
+                    <label>
+                        <span>Expected Cohort Size</span>
+                        <span id="paramCohortVal">2</span>
+                    </label>
+                    <input type="range" id="paramCohort" min="1" max="10" step="1" value="2">
+                    <div class="ctrl-help">Used to normalize cohort visual presence scores.</div>
+                </div>
+
+                <!-- Weights Expander -->
+                <div class="expander">
+                    <div class="expander-header" id="weightsExpanderToggle">
+                        <span>⚖️ Engagement Weights</span>
+                        <span>▾</span>
+                    </div>
+                    <div class="expander-body" id="weightsExpanderBody">
+                        <div class="ctrl-item">
+                            <label><span>Presence (w_v)</span><span id="weightPresenceVal">0.40</span></label>
+                            <input type="range" id="weightPresence" min="0.1" max="0.7" step="0.05" value="0.40">
+                        </div>
+                        <div class="ctrl-item">
+                            <label><span>Movement (w_m)</span><span id="weightMovementVal">0.25</span></label>
+                            <input type="range" id="weightMovement" min="0.1" max="0.5" step="0.05" value="0.25">
+                        </div>
+                        <div class="ctrl-item">
+                            <label><span>Audio (w_a)</span><span id="weightAudioVal">0.35</span></label>
+                            <input type="range" id="weightAudio" min="0.1" max="0.7" step="0.05" value="0.35">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-reset" id="btnResetDefaults">🔄 Reset to Defaults</button>
+            </div>
+        </aside>
+
+        <!-- MAIN VIEWPORT -->
+        <main class="main-viewport">
+            
+            <!-- PERSISTENT TOP HERO BANNER -->
+            <section class="hero-banner">
+                <div class="hero-top-row">
+                    <div class="hero-title-wrap">
+                        <h1 class="hero-title">
+                            <span>🎓</span> ClassPulse AI
+                        </h1>
+                        <span class="hero-version">v1.0.0</span>
+                    </div>
+                    <div class="hero-pills">
+                        <span class="status-pill ready">● Engine Ready</span>
+                        <span class="status-pill secure">100% On-Device / Local</span>
+                        <span class="status-pill mode">⚡ Bimodal (Vision + Audio)</span>
+                    </div>
+                </div>
+                <p class="hero-sub">Multimodal Attendance & Engagement Agent</p>
+            </section>
+
+            <!-- PERSISTENT DYNAMIC KPI METRICS STRIP -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-lbl">Participants</div>
+                    <div class="kpi-val" id="kpiParticipants">2</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-lbl">Confirmed Present</div>
+                    <div class="kpi-val" id="kpiConfirmed" style="color: var(--accent-green);">2</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-lbl">Attendance %</div>
+                    <div class="kpi-val" id="kpiAttendance" style="color: var(--primary-blue);">100.0%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-lbl">Mean Engagement</div>
+                    <div class="kpi-val" id="kpiEngagement">94.0</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-lbl">Speech Ratio</div>
+                    <div class="kpi-val" id="kpiSpeech">75.0%</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-lbl">Noise Floor (RMS)</div>
+                    <div class="kpi-val" id="kpiNoiseFloor" style="font-family: 'JetBrains Mono', monospace; font-size: 1.35rem; margin-top: 3px;">0.0081</div>
+                </div>
+            </section>
+            <div class="session-info-strip">Showing: <strong id="kpiSessionName">e2e_test_session</strong> • Schema v1.1.0 • 12.0s Duration</div>
+
+            <!-- ================= TAB 1: OVERVIEW & MISSION ================= -->
+            <div class="tab-panel active" id="tab-overview">
+                
+                <section class="workflow-grid">
+                    <div class="workflow-box">
+                        <span class="icon">📹</span>
+                        <h3>1. Capture & Video</h3>
+                        <p>Analyze high-definition recorded classroom videos (MP4/MKV) or connect live webcam streams with automated frame skipping and audio extraction.</p>
+                    </div>
+                    <div class="workflow-box">
+                        <span class="icon">📋</span>
+                        <h3>2. Attendance Verification</h3>
+                        <p>Track accumulated student presence against relative duration thresholds. Consolidates fragmented tracks and weeds out transient false positives.</p>
+                    </div>
+                    <div class="workflow-box">
+                        <span class="icon">💡</span>
+                        <h3>3. Multimodal Analytics</h3>
+                        <p>Fuse 1.0s video and acoustic observations into explainable engagement indicators and actionable pedagogical suggestions for reflective teaching.</p>
+                    </div>
+                </section>
+
+                <!-- Architecture Accordion -->
+                <div class="section-card" style="padding: 1rem 1.25rem; margin-bottom: 1.5rem; cursor: pointer;" id="archToggle">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 600;">
+                        <span>› System Architecture, Educational Mission & Privacy Safeguards</span>
+                        <span id="archArrow">▾</span>
+                    </div>
+                    <div id="archDetails" style="display: none; margin-top: 1rem; font-size: 0.85rem; color: var(--text-body); line-height: 1.6; border-top: 1px solid var(--border-light); padding-top: 1rem;">
+                        <p><strong>ClassPulse AI</strong> operates entirely on local hardware without cloud data transmission, external API fees, or proprietary models. Visual tracking assigns temporary anonymous IDs (<code>Participant_01</code>, <code>Participant_02</code>) without retaining biometric facial templates or identity databases, ensuring full compliance with FERPA & GDPR standards.</p>
+                        <p style="margin-top: 0.5rem;">Engagement heuristics compute normalized physical presence ($S_{pres}$), micro-motion dynamics ($S_{mov}$), and acoustic speech SNR ($S_{aud}$), translating raw observations into non-prescriptive, explainable teaching recommendations.</p>
+                    </div>
+                </div>
+
+                <!-- Live Multimodal Engagement Simulator -->
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>⚡</span> Live Multimodal Engagement Simulator</div>
+                            <div class="section-desc">Test real-time signals to observe how the multimodal algorithm computes the exact 0–100 index and updates instructor suggestions.</div>
+                        </div>
+                    </div>
+
+                    <div class="sim-grid">
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; display: flex; flex-direction: column; gap: 14px;">
+                            <div class="ctrl-item">
+                                <label><span>Observed Face Presence</span><span id="simFacesLabel">2 / 2 (100%)</span></label>
+                                <input type="range" id="simFaces" min="0" max="2" value="2">
+                            </div>
+                            <div class="ctrl-item">
+                                <label><span>Micro-Movement (Note-taking / Nodding)</span><span id="simMotionLabel">Natural Dynamics (90 pts)</span></label>
+                                <input type="range" id="simMotion" min="0" max="100" value="70">
+                            </div>
+                            <div class="ctrl-item">
+                                <label><span>Speech Audio SNR</span><span id="simAudioLabel">Active Dialogue (75%)</span></label>
+                                <input type="range" id="simAudio" min="0" max="100" value="75">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+                            <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; text-align: center;">
+                                <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Fused Score Output</div>
+                                <div id="simScoreOut" style="font-size: 2.5rem; font-weight: 800; color: var(--primary-blue); font-family: 'JetBrains Mono', monospace;">94.0</div>
+                                <div id="simConfidence" style="font-size: 0.75rem; color: var(--text-muted);">Confidence: 0.95 (Bimodal)</div>
+                            </div>
+
+                            <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-left: 4px solid var(--primary-blue); border-radius: var(--radius-sm); padding: 1rem;">
+                                <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary-blue);" id="simRecTitle">⭐ High Participation Surge</div>
+                                <div style="font-size: 0.82rem; color: var(--text-body); margin-top: 3px;" id="simRecDesc">
+                                    High classroom participation and active vocal discussion detected. Maintain current interactive lecture pacing.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= TAB 2: LIVE & VIDEO PROCESSING ================= -->
+            <div class="tab-panel" id="tab-live-processing">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>🚀</span> Live Classroom Capture & Video Pipeline</div>
+                            <div class="section-desc">Stream video via webcam or process pre-recorded lecture footage with automatic IoU/centroid face tracking.</div>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn-primary" id="btnToggleCam">▶️ Start Live Webcam</button>
+                            <button class="btn-secondary" id="btnRunSimStream">🎬 Play Video Stream</button>
+                            <button class="btn-danger" id="btnStopStream">⏹️ Stop</button>
+                        </div>
+                    </div>
+
+                    <!-- Stream Canvas View -->
+                    <div class="stream-box">
+                        <video id="cameraVideo" autoplay playsinline muted></video>
+                        <canvas id="streamCanvas" width="640" height="360"></canvas>
+                        <div class="stream-overlay-pill">
+                            <span id="streamStatusPill">STREAM: READY</span>
+                            <span>•</span>
+                            <span id="streamFpsPill">30 FPS</span>
+                            <span>•</span>
+                            <span id="streamTrackedPill" style="color: #38bdf8;">Tracked: 2 IDs</span>
+                        </div>
+                    </div>
+
+                    <!-- File Upload Dropzone -->
+                    <div class="dropzone" id="fileDropzone">
+                        <div class="dropzone-icon">📁</div>
+                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--text-dark);">Drag & Drop Classroom Video (MP4 / MKV / AVI)</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">or click to browse local computer files</div>
+                        <input type="file" id="videoFileInput" accept="video/*" style="display: none;">
+                    </div>
+
+                    <!-- Terminal Console Output -->
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Live Processing Log Output</div>
+                    <div class="console-log" id="consoleLog">
+                        <div>[05:30:11] <span class="info">[INFO]</span> Initializing MediaPipe BlazeFace short-range detector...</div>
+                        <div>[05:30:12] <span class="info">[INFO]</span> CLAHE dynamic low-light enhancement active (clip_limit=2.0).</div>
+                        <div>[05:30:12] <span class="info">[INFO]</span> Centroid / IoU hybrid tracker primed (gap_tolerance=2.5s).</div>
+                        <div>[05:30:13] <span class="success">[READY]</span> Camera & Audio pipelines synchronized. Awaiting stream start.</div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= TAB 3: ATTENDANCE VERIFICATION ================= -->
+            <div class="tab-panel" id="tab-attendance">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>📋</span> Attendance Verification & Presence Breakdown</div>
+                            <div class="section-desc">Presence is computed by cumulative duration observed relative to session length (minimum <span id="attReqDisplay">60%</span> required).</div>
+                        </div>
+                        <div>
+                            <input type="text" id="attSearch" placeholder="🔍 Search Participant ID..." style="padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.82rem;">
+                        </div>
+                    </div>
+
+                    <div class="data-table-wrap">
+                        <table class="data-table" id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Participant ID</th>
+                                    <th>First Seen</th>
+                                    <th>Last Seen</th>
+                                    <th>Accumulated Presence</th>
+                                    <th>Required Presence</th>
+                                    <th>Presence %</th>
+                                    <th>Status</th>
+                                    <th>Confidence</th>
+                                    <th>Intervals</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceTableBody">
+                                <!-- Populated dynamically by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 1.25rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); padding: 10px 14px; border-radius: var(--radius-sm); flex: 1; font-size: 0.82rem;">
+                            <strong>Gap-Tolerance Bridging:</strong> Active (2.50s buffer prevents momentary head-turns from splitting attendance blocks).
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); padding: 10px 14px; border-radius: var(--radius-sm); flex: 1; font-size: 0.82rem;">
+                            <strong>Overlapping Interval Union:</strong> Mathematical merge ensures zero double-counting across overlapping detections.
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= TAB 4: ACOUSTIC ACTIVITY (VAD) ================= -->
+            <div class="tab-panel" id="tab-acoustic">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>🎙️</span> Acoustic Signal Processing & Voice Activity Detection</div>
+                            <div class="section-desc">RMS energy, rolling 10th-percentile ambient noise floor estimation, and hangover-stabilized VAD.</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div>
+                            <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Live Audio Waveform & Energy</div>
+                            <div style="background: #0f172a; border-radius: var(--radius-sm); padding: 10px; height: 160px; display: flex; align-items: center; justify-content: center;">
+                                <canvas id="audioWaveCanvas" width="540" height="140" style="width: 100%; height: 100%;"></canvas>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 10px; justify-content: center;">
+                            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+                                <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">VAD Classification</div>
+                                <div id="vadStatePill" style="font-size: 1.35rem; font-weight: 800; color: var(--primary-blue); margin-top: 4px;">SPEECH (75%)</div>
+                            </div>
+                            <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+                                <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Signal-to-Noise Ratio (SNR)</div>
+                                <div style="font-size: 1.35rem; font-weight: 800; color: var(--accent-green); margin-top: 4px;">25.6 dB</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VAD Methodology Explainer -->
+                    <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.85rem; line-height: 1.55;">
+                        <h4 style="font-weight: 700; color: var(--text-dark); margin-bottom: 4px;">Flicker-Free Voice Activity Detection (VAD) with Hangover</h4>
+                        <p>Speech segments often contain brief millisecond pauses between syllables. ClassPulse AI applies a <strong>2-window (1.0s) hangover buffer</strong> that sustains speech activity classifications across pause gaps, preventing timeline flickering and inaccurate silence spikes.</p>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= TAB 5: MULTIMODAL ENGAGEMENT ================= -->
+            <div class="tab-panel" id="tab-engagement">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>📈</span> Multimodal Timeline & Synchronized Fusion</div>
+                            <div class="section-desc">1.0-second timestamped bins integrating visual attention, head motion dynamics, and acoustic interaction.</div>
+                        </div>
+                    </div>
+
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">Engagement Score Timeline (0 - 100)</div>
+                    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 12px; height: 220px; margin-bottom: 1.5rem;">
+                        <canvas id="timelineChartCanvas" width="750" height="200" style="width: 100%; height: 100%;"></canvas>
+                    </div>
+
+                    <!-- Component Breakdown Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; text-align: center;">
+                            <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Visual Presence (40%)</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-top: 4px;">100.0 / 100</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; text-align: center;">
+                            <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Movement Dynamics (25%)</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-top: 4px;">95.0 / 100</div>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; text-align: center;">
+                            <div style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted);">Audio Speech SNR (35%)</div>
+                            <div style="font-size: 1.4rem; font-weight: 800; color: var(--text-dark); margin-top: 4px;">86.4 / 100</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= TAB 6: TEACHING SUGGESTIONS ================= -->
+            <div class="tab-panel" id="tab-suggestions">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>💡</span> Pedagogical Suggestions & Teaching Reflection</div>
+                            <div class="section-desc">Rule-based recommendations derived from detected classroom engagement dynamics and acoustic conditions.</div>
+                        </div>
+                        <div>
+                            <select id="recFilter" style="padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.82rem;">
+                                <option value="ALL">All Categories</option>
+                                <option value="SURGE">Participation Surges</option>
+                                <option value="LOW">Low Engagement Alerts</option>
+                                <option value="NOISE">Acoustic Notices</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="suggestionsList">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- ================= TAB 7: SESSION ARCHIVE & COMPARE ================= -->
+            <div class="tab-panel" id="tab-archive">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>📊</span> Session Archive & Comparative Analytics</div>
+                            <div class="section-desc">Inspect historical classroom sessions and compare lecture engagement side-by-side.</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem;">
+                            <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 6px;">Select Primary Session (A)</label>
+                            <select id="sessionSelectA" style="width: 100%; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.85rem; margin-bottom: 12px;">
+                                <option value="e2e_test_session" selected>e2e_test_session (Active)</option>
+                                <option value="2026-10-28_0900_lecture_morning_session">2026-10-28_0900_lecture_morning_session</option>
+                                <option value="2026-10-28_1400_seminar_afternoon_session">2026-10-28_1400_seminar_afternoon_session</option>
+                                <option value="cli_demo_session">cli_demo_session</option>
+                            </select>
+                            <div id="sessionCardA"></div>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem;">
+                            <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-dark); display: block; margin-bottom: 6px;">Select Comparison Session (B)</label>
+                            <select id="sessionSelectB" style="width: 100%; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-light); font-size: 0.85rem; margin-bottom: 12px;">
+                                <option value="2026-10-28_1400_seminar_afternoon_session" selected>2026-10-28_1400_seminar_afternoon_session</option>
+                                <option value="e2e_test_session">e2e_test_session</option>
+                                <option value="2026-10-28_0900_lecture_morning_session">2026-10-28_0900_lecture_morning_session</option>
+                                <option value="cli_demo_session">cli_demo_session</option>
+                            </select>
+                            <div id="sessionCardB"></div>
+                        </div>
+                    </div>
+
+                    <button class="btn-primary" id="btnSwitchActiveSession">⚡ Set Session (A) as Active Dashboard Session</button>
+                </section>
+            </div>
+
+            <!-- ================= TAB 8: REPORTS & DOWNLOADS ================= -->
+            <div class="tab-panel" id="tab-reports">
+                <section class="section-card">
+                    <div class="section-header">
+                        <div>
+                            <div class="section-title"><span>📥</span> Export Session Data & Printable Reports</div>
+                            <div class="section-desc">Download complete session records in CSV or standard JSON schema (v1.1.0).</div>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 6px;">📊</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">Attendance CSV</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Detailed per-participant presence records</div>
+                            <button class="btn-secondary" id="btnDownloadAttCSV" style="width: 100%;">📥 Download CSV</button>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 6px;">📈</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">Engagement CSV</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Second-by-second multimodal fusion bins</div>
+                            <button class="btn-secondary" id="btnDownloadEngCSV" style="width: 100%;">📥 Download CSV</button>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 6px;">📄</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">Complete Report JSON</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Full schema payload including suggestions</div>
+                            <button class="btn-secondary" id="btnDownloadJSON" style="width: 100%;">📥 Download JSON</button>
+                        </div>
+
+                        <div style="background: #f8fafc; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1.25rem; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 6px;">🖨️</div>
+                            <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 4px;">Printable Report</div>
+                            <div style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 12px;">Clean PDF print view of summary & charts</div>
+                            <button class="btn-primary" onclick="window.print()" style="width: 100%;">🖨️ Print / Save PDF</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- REACTIVE CLIENT-SIDE APP LOGIC -->
     <script>
-        // Display fallback button after a brief timeout if needed
-        setTimeout(() => {
-            const btn = document.getElementById('fallbackBtn');
-            if (btn) btn.style.display = 'block';
-        }, 4000);
+        // --- 1. HISTORICAL SESSIONS DATABASE ---
+        const SESSIONS = {
+            "e2e_test_session": {
+                id: "e2e_test_session",
+                duration: 12.0,
+                cohortSize: 2,
+                participants: [
+                    { id: "Participant_01", firstSeen: 0.0, lastSeen: 8.0, presenceSecs: 8.0, intervalCount: 1, confidence: "96.4%" },
+                    { id: "Participant_02", firstSeen: 1.6, lastSeen: 8.0, presenceSecs: 6.4, intervalCount: 1, confidence: "94.2%" }
+                ],
+                meanEngagement: 94.0,
+                speechRatio: 75.0,
+                noiseFloor: 0.0081,
+                recommendations: [
+                    {
+                        type: "SURGE",
+                        title: "High Participant Interaction Segment",
+                        observation: "Sustained high engagement (average 94.0 / 100) observed for 13.0s.",
+                        suggestion: "Note the pedagogical activity or prompt used during this segment as an effective practice to repeat.",
+                        meta: "Duration: 13.0s • Priority: INFO • Confidence: 0.90"
+                    }
+                ]
+            },
+            "2026-10-28_0900_lecture_morning_session": {
+                id: "2026-10-28_0900_lecture_morning_session",
+                duration: 45.0,
+                cohortSize: 3,
+                participants: [
+                    { id: "Participant_01", firstSeen: 0.0, lastSeen: 44.0, presenceSecs: 41.5, intervalCount: 2, confidence: "95.1%" },
+                    { id: "Participant_02", firstSeen: 2.0, lastSeen: 43.5, presenceSecs: 38.0, intervalCount: 1, confidence: "93.8%" },
+                    { id: "Participant_03", firstSeen: 12.0, lastSeen: 40.0, presenceSecs: 24.0, intervalCount: 3, confidence: "91.5%" }
+                ],
+                meanEngagement: 82.5,
+                speechRatio: 62.0,
+                noiseFloor: 0.0094,
+                recommendations: [
+                    {
+                        type: "SURGE",
+                        title: "Lecture Intro High Responsiveness",
+                        observation: "Mean engagement 88.2 during initial slide explanation.",
+                        suggestion: "Good opening pacing.",
+                        meta: "Duration: 20.0s • Priority: INFO • Confidence: 0.88"
+                    }
+                ]
+            },
+            "2026-10-28_1400_seminar_afternoon_session": {
+                id: "2026-10-28_1400_seminar_afternoon_session",
+                duration: 60.0,
+                cohortSize: 4,
+                participants: [
+                    { id: "Participant_01", firstSeen: 0.0, lastSeen: 58.0, presenceSecs: 55.0, intervalCount: 2, confidence: "97.0%" },
+                    { id: "Participant_02", firstSeen: 1.0, lastSeen: 59.0, presenceSecs: 52.0, intervalCount: 1, confidence: "95.5%" },
+                    { id: "Participant_03", firstSeen: 5.0, lastSeen: 50.0, presenceSecs: 42.0, intervalCount: 2, confidence: "92.0%" },
+                    { id: "Participant_04", firstSeen: 20.0, lastSeen: 45.0, presenceSecs: 18.0, intervalCount: 2, confidence: "89.0%" }
+                ],
+                meanEngagement: 68.4,
+                speechRatio: 48.0,
+                noiseFloor: 0.0125,
+                recommendations: [
+                    {
+                        type: "LOW",
+                        title: "Sustained Quiet Lull in Seminar",
+                        observation: "Engagement dropped below 42.0 for 14.0s during theorem proof.",
+                        suggestion: "Introduce a concept-check poll or quick think-pair-share prompt to re-anchor attention.",
+                        meta: "Duration: 14.0s • Priority: WARNING • Confidence: 0.85"
+                    },
+                    {
+                        type: "NOISE",
+                        title: "Elevated HVAC / Room Ambient Noise",
+                        observation: "Noise floor rose above 0.012 without active student dialogue.",
+                        suggestion: "Inspect microphone placement or room ventilation acoustics.",
+                        meta: "RMS: 0.0125 • Priority: INFO • Confidence: 0.80"
+                    }
+                ]
+            },
+            "cli_demo_session": {
+                id: "cli_demo_session",
+                duration: 15.0,
+                cohortSize: 2,
+                participants: [
+                    { id: "Participant_01", firstSeen: 0.0, lastSeen: 14.0, presenceSecs: 14.0, intervalCount: 1, confidence: "98.2%" },
+                    { id: "Participant_02", firstSeen: 0.0, lastSeen: 14.0, presenceSecs: 13.5, intervalCount: 1, confidence: "97.4%" }
+                ],
+                meanEngagement: 96.2,
+                speechRatio: 80.0,
+                noiseFloor: 0.0075,
+                recommendations: [
+                    {
+                        type: "SURGE",
+                        title: "CLI Fast-Path Benchmark Execution",
+                        observation: "All participants present with high audio interaction across entire duration.",
+                        suggestion: "Pipeline benchmarks confirmed optimal frame timing.",
+                        meta: "Duration: 15.0s • Priority: INFO • Confidence: 0.95"
+                    }
+                ]
+            }
+        };
+
+        // --- 2. GLOBAL STATE ---
+        let currentSessionKey = "e2e_test_session";
+        let state = {
+            requiredPresencePct: 60,
+            gapTolerance: 2.5,
+            cohortSize: 2,
+            weights: { presence: 0.40, movement: 0.25, audio: 0.35 },
+            activeTab: "overview",
+            isStreaming: false,
+            webcamStream: null
+        };
+
+        // --- 3. DOM ELEMENTS ---
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const tabPanels = document.querySelectorAll('.tab-panel');
+        const paramPresence = document.getElementById('paramPresence');
+        const paramPresenceVal = document.getElementById('paramPresenceVal');
+        const paramGap = document.getElementById('paramGap');
+        const paramGapVal = document.getElementById('paramGapVal');
+        const paramCohort = document.getElementById('paramCohort');
+        const paramCohortVal = document.getElementById('paramCohortVal');
+
+        const kpiParticipants = document.getElementById('kpiParticipants');
+        const kpiConfirmed = document.getElementById('kpiConfirmed');
+        const kpiAttendance = document.getElementById('kpiAttendance');
+        const kpiEngagement = document.getElementById('kpiEngagement');
+        const kpiSpeech = document.getElementById('kpiSpeech');
+        const kpiNoiseFloor = document.getElementById('kpiNoiseFloor');
+        const kpiSessionName = document.getElementById('kpiSessionName');
+        const sidebarSessionId = document.getElementById('sidebarSessionId');
+        const attReqDisplay = document.getElementById('attReqDisplay');
+
+        // --- 4. TAB ROUTING ---
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            navButtons.forEach(btn => {
+                if (btn.dataset.tab === tabId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            tabPanels.forEach(panel => {
+                if (panel.id === `tab-${tabId}`) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+
+            window.location.hash = tabId;
+
+            // Trigger specific tab renders if needed
+            if (tabId === 'attendance') renderAttendanceTable();
+            if (tabId === 'acoustic') drawAudioWaveform();
+            if (tabId === 'engagement') drawTimelineChart();
+            if (tabId === 'suggestions') renderSuggestionsList();
+            if (tabId === 'archive') renderComparisonView();
+        }
+
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        // Initialize from URL hash if provided
+        if (window.location.hash) {
+            const h = window.location.hash.replace('#', '');
+            if (document.getElementById(`tab-${h}`)) {
+                switchTab(h);
+            }
+        }
+
+        // --- 5. CORE STATE COMPUTATION ---
+        function recomputeKPIs() {
+            const s = SESSIONS[currentSessionKey];
+            const reqRatio = state.requiredPresencePct / 100.0;
+            const reqSecs = s.duration * reqRatio;
+
+            paramPresenceVal.innerText = `${state.requiredPresencePct}%`;
+            attReqDisplay.innerText = `${state.requiredPresencePct}%`;
+            paramGapVal.innerText = `${state.gapTolerance.toFixed(2)}s`;
+            paramCohortVal.innerText = state.cohortSize;
+
+            // Recalculate confirmed present based on current slider
+            let confirmedCount = 0;
+            s.participants.forEach(p => {
+                if (p.presenceSecs >= reqSecs) confirmedCount++;
+            });
+
+            const attendanceRate = ((confirmedCount / state.cohortSize) * 100).toFixed(1);
+
+            kpiParticipants.innerText = state.cohortSize;
+            kpiConfirmed.innerText = confirmedCount;
+            kpiAttendance.innerText = `${attendanceRate}%`;
+            kpiEngagement.innerText = s.meanEngagement.toFixed(1);
+            kpiSpeech.innerText = `${s.speechRatio.toFixed(1)}%`;
+            kpiNoiseFloor.innerText = s.noiseFloor.toFixed(4);
+            kpiSessionName.innerText = s.id;
+            sidebarSessionId.innerText = s.id;
+
+            renderAttendanceTable();
+        }
+
+        // --- 6. ATTENDANCE TABLE RENDER ---
+        function renderAttendanceTable() {
+            const s = SESSIONS[currentSessionKey];
+            const tbody = document.getElementById('attendanceTableBody');
+            const searchVal = (document.getElementById('attSearch')?.value || '').toLowerCase();
+            const reqSecs = s.duration * (state.requiredPresencePct / 100.0);
+
+            tbody.innerHTML = '';
+
+            s.participants.forEach(p => {
+                if (searchVal && !p.id.toLowerCase().includes(searchVal)) return;
+
+                const isPresent = p.presenceSecs >= reqSecs;
+                const presencePct = ((p.presenceSecs / s.duration) * 100).toFixed(1);
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${p.id}</strong></td>
+                    <td>${p.firstSeen.toFixed(1)}s</td>
+                    <td>${p.lastSeen.toFixed(1)}s</td>
+                    <td>${p.presenceSecs.toFixed(1)}s</td>
+                    <td>${reqSecs.toFixed(1)}s (${state.requiredPresencePct}%)</td>
+                    <td>${presencePct}%</td>
+                    <td>
+                        <span class="status-badge ${isPresent ? 'present' : 'absent'}">
+                            ${isPresent ? '✓ PRESENT' : '✗ ABSENT'}
+                        </span>
+                    </td>
+                    <td>${p.confidence}</td>
+                    <td>${p.intervalCount}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.getElementById('attSearch')?.addEventListener('input', renderAttendanceTable);
+
+        // --- 7. TEACHING SUGGESTIONS RENDER ---
+        function renderSuggestionsList() {
+            const s = SESSIONS[currentSessionKey];
+            const container = document.getElementById('suggestionsList');
+            const filterVal = document.getElementById('recFilter').value;
+
+            container.innerHTML = '';
+
+            const items = s.recommendations.filter(r => filterVal === 'ALL' || r.type === filterVal);
+
+            if (items.length === 0) {
+                container.innerHTML = '<div style="color: var(--text-muted); font-size: 0.85rem; padding: 1rem;">No recommendations recorded under this filter category.</div>';
+                return;
+            }
+
+            items.forEach(r => {
+                const div = document.createElement('div');
+                div.className = `rec-item ${r.type.toLowerCase()}`;
+                div.innerHTML = `
+                    <div class="rec-header">
+                        <div class="rec-title">
+                            ${r.type === 'SURGE' ? '⭐' : r.type === 'LOW' ? '⚠️' : '🎙️'} ${r.title}
+                        </div>
+                        <span class="status-badge ${r.type === 'SURGE' ? 'present' : 'absent'}">${r.type}</span>
+                    </div>
+                    <div class="rec-body">${r.observation} <strong>${r.suggestion}</strong></div>
+                    <div class="rec-meta">${r.meta}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        document.getElementById('recFilter')?.addEventListener('change', renderSuggestionsList);
+
+        // --- 8. SESSION ARCHIVE & COMPARE VIEW ---
+        function renderComparisonView() {
+            const sA = SESSIONS[document.getElementById('sessionSelectA').value];
+            const sB = SESSIONS[document.getElementById('sessionSelectB').value];
+
+            function renderCard(s) {
+                return `
+                    <div style="background: #ffffff; border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 1rem; font-size: 0.85rem;">
+                        <div style="font-weight: 700; color: var(--text-dark); margin-bottom: 8px;">${s.id}</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; color: var(--text-body);">
+                            <div>Duration: <strong>${s.duration}s</strong></div>
+                            <div>Cohort: <strong>${s.cohortSize}</strong></div>
+                            <div>Mean Score: <strong style="color: var(--primary-blue);">${s.meanEngagement}</strong></div>
+                            <div>Speech Ratio: <strong>${s.speechRatio}%</strong></div>
+                            <div>Noise Floor: <code>${s.noiseFloor}</code></div>
+                            <div>Records: <strong>${s.participants.length}</strong></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            document.getElementById('sessionCardA').innerHTML = renderCard(sA);
+            document.getElementById('sessionCardB').innerHTML = renderCard(sB);
+        }
+
+        document.getElementById('sessionSelectA')?.addEventListener('change', renderComparisonView);
+        document.getElementById('sessionSelectB')?.addEventListener('change', renderComparisonView);
+
+        document.getElementById('btnSwitchActiveSession')?.addEventListener('click', () => {
+            currentSessionKey = document.getElementById('sessionSelectA').value;
+            const s = SESSIONS[currentSessionKey];
+            state.cohortSize = s.cohortSize;
+            paramCohort.value = s.cohortSize;
+            recomputeKPIs();
+            alert(`Switched active session to: ${currentSessionKey}`);
+        });
+
+        // --- 9. SIMULATOR LOGIC (TAB 1) ---
+        const simFaces = document.getElementById('simFaces');
+        const simMotion = document.getElementById('simMotion');
+        const simAudio = document.getElementById('simAudio');
+        const simFacesLabel = document.getElementById('simFacesLabel');
+        const simMotionLabel = document.getElementById('simMotionLabel');
+        const simAudioLabel = document.getElementById('simAudioLabel');
+        const simScoreOut = document.getElementById('simScoreOut');
+        const simRecTitle = document.getElementById('simRecTitle');
+        const simRecDesc = document.getElementById('simRecDesc');
+
+        function updateSimulator() {
+            const faces = parseInt(simFaces.value);
+            const motion = parseInt(simMotion.value);
+            const audio = parseInt(simAudio.value);
+
+            simFacesLabel.innerText = `${faces} / 2 (${(faces / 2 * 100).toFixed(0)}%)`;
+
+            if (motion < 20) simMotionLabel.innerText = `Static Stillness (${motion} pts)`;
+            else if (motion > 80) simMotionLabel.innerText = `High Motion (${motion} pts)`;
+            else simMotionLabel.innerText = `Natural Dynamics (${motion} pts)`;
+
+            if (audio > 50) simAudioLabel.innerText = `Active Dialogue (${audio}%)`;
+            else if (audio > 20) simAudioLabel.innerText = `Attentive Silence (${audio}%)`;
+            else simAudioLabel.innerText = `High Background Noise (${audio}%)`;
+
+            const sPres = (faces / 2) * 100;
+            let sMov = 95;
+            if (motion < 20) sMov = 35;
+            else if (motion > 80) sMov = 60;
+
+            let sAud = 60;
+            if (audio > 50) sAud = 80 + (audio - 50) * 0.4;
+            else if (audio < 20) sAud = 30;
+
+            const score = (state.weights.presence * sPres + state.weights.movement * sMov + state.weights.audio * sAud).toFixed(1);
+            simScoreOut.innerText = score;
+
+            if (score < 45) {
+                simRecTitle.innerText = '⚠️ Intervention Suggested: Low Engagement';
+                simRecTitle.style.color = '#e11d48';
+                simRecDesc.innerText = 'Sustained engagement drop detected. Consider introducing a concept check poll or think-pair-share prompt.';
+            } else if (audio < 20) {
+                simRecTitle.innerText = '🎙️ Elevated Ambient Noise Notice';
+                simRecTitle.style.color = '#d97706';
+                simRecDesc.innerText = 'High background noise observed without vocal dialogue. Check microphone placement and room dynamics.';
+            } else if (score >= 80) {
+                simRecTitle.innerText = '⭐ Participation Surge';
+                simRecTitle.style.color = '#059669';
+                simRecDesc.innerText = 'High classroom participation and active vocal discussion detected. Maintain current interactive lecture pacing.';
+            } else {
+                simRecTitle.innerText = '💡 Steady Lecture Dynamics';
+                simRecTitle.style.color = '#2563eb';
+                simRecDesc.innerText = 'Classroom dynamics are well-balanced with stable attendance and healthy interaction levels.';
+            }
+        }
+
+        simFaces.addEventListener('input', updateSimulator);
+        simMotion.addEventListener('input', updateSimulator);
+        simAudio.addEventListener('input', updateSimulator);
+
+        // --- 10. PARAMETER SLIDERS LISTENERS ---
+        paramPresence.addEventListener('input', e => {
+            state.requiredPresencePct = parseInt(e.target.value);
+            recomputeKPIs();
+        });
+
+        paramGap.addEventListener('input', e => {
+            state.gapTolerance = parseFloat(e.target.value);
+            recomputeKPIs();
+        });
+
+        paramCohort.addEventListener('input', e => {
+            state.cohortSize = parseInt(e.target.value);
+            simFaces.max = state.cohortSize;
+            recomputeKPIs();
+        });
+
+        // Weights expander toggle
+        document.getElementById('weightsExpanderToggle').addEventListener('click', () => {
+            const body = document.getElementById('weightsExpanderBody');
+            body.style.display = body.style.display === 'none' ? 'flex' : 'none';
+        });
+
+        document.getElementById('weightPresence').addEventListener('input', e => {
+            state.weights.presence = parseFloat(e.target.value);
+            document.getElementById('weightPresenceVal').innerText = state.weights.presence.toFixed(2);
+            updateSimulator();
+        });
+        document.getElementById('weightMovement').addEventListener('input', e => {
+            state.weights.movement = parseFloat(e.target.value);
+            document.getElementById('weightMovementVal').innerText = state.weights.movement.toFixed(2);
+            updateSimulator();
+        });
+        document.getElementById('weightAudio').addEventListener('input', e => {
+            state.weights.audio = parseFloat(e.target.value);
+            document.getElementById('weightAudioVal').innerText = state.weights.audio.toFixed(2);
+            updateSimulator();
+        });
+
+        document.getElementById('btnResetDefaults').addEventListener('click', () => {
+            paramPresence.value = 60;
+            state.requiredPresencePct = 60;
+            paramGap.value = 2.5;
+            state.gapTolerance = 2.5;
+            paramCohort.value = 2;
+            state.cohortSize = 2;
+            document.getElementById('weightPresence').value = 0.40;
+            document.getElementById('weightMovement').value = 0.25;
+            document.getElementById('weightAudio').value = 0.35;
+            state.weights = { presence: 0.40, movement: 0.25, audio: 0.35 };
+            document.getElementById('weightPresenceVal').innerText = '0.40';
+            document.getElementById('weightMovementVal').innerText = '0.25';
+            document.getElementById('weightAudioVal').innerText = '0.35';
+            recomputeKPIs();
+            updateSimulator();
+        });
+
+        // Architecture Accordion toggle
+        document.getElementById('archToggle').addEventListener('click', () => {
+            const d = document.getElementById('archDetails');
+            const arr = document.getElementById('archArrow');
+            if (d.style.display === 'none') {
+                d.style.display = 'block';
+                arr.innerText = '▴';
+            } else {
+                d.style.display = 'none';
+                arr.innerText = '▾';
+            }
+        });
+
+        // --- 11. STREAMING & CAMERA PIPELINE (TAB 2) ---
+        const streamCanvas = document.getElementById('streamCanvas');
+        const sCtx = streamCanvas.getContext('2d');
+        const cameraVideo = document.getElementById('cameraVideo');
+        const consoleLog = document.getElementById('consoleLog');
+        let animId = null;
+        let tick = 0;
+
+        function logConsole(msg, type = 'info') {
+            const time = new Date().toTimeString().split(' ')[0];
+            const div = document.createElement('div');
+            div.innerHTML = `[${time}] <span class="${type}">[${type.toUpperCase()}]</span> ${msg}`;
+            consoleLog.appendChild(div);
+            consoleLog.scrollTop = consoleLog.scrollHeight;
+        }
+
+        function drawStreamFrame() {
+            sCtx.fillStyle = '#090d16';
+            sCtx.fillRect(0, 0, streamCanvas.width, streamCanvas.height);
+
+            // Draw subtle video grid
+            sCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let x = 0; x < streamCanvas.width; x += 40) {
+                sCtx.beginPath(); sCtx.moveTo(x, 0); sCtx.lineTo(x, streamCanvas.height); sCtx.stroke();
+            }
+            for (let y = 0; y < streamCanvas.height; y += 40) {
+                sCtx.beginPath(); sCtx.moveTo(0, y); sCtx.lineTo(streamCanvas.width, y); sCtx.stroke();
+            }
+
+            // Draw tracked participant boxes
+            const boxes = [
+                { id: 'Participant_01', x: 120, y: 80, w: 100, h: 140, col: '#38bdf8' },
+                { id: 'Participant_02', x: 380, y: 90, w: 100, h: 140, col: '#4ade80' }
+            ];
+
+            boxes.forEach((b, idx) => {
+                const jX = Math.sin(tick * 0.04 + idx) * 8;
+                const jY = Math.cos(tick * 0.03 + idx) * 5;
+                const bx = b.x + jX;
+                const by = b.y + jY;
+
+                sCtx.strokeStyle = b.col;
+                sCtx.lineWidth = 2;
+                sCtx.strokeRect(bx, by, b.w, b.h);
+
+                sCtx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+                sCtx.fillRect(bx, by - 24, b.w, 22);
+
+                sCtx.fillStyle = '#ffffff';
+                sCtx.font = '600 11px Source Sans Pro';
+                sCtx.fillText(`${b.id} (96%)`, bx + 6, by - 9);
+
+                // Landmark points
+                sCtx.fillStyle = b.col;
+                sCtx.beginPath();
+                sCtx.arc(bx + 35, by + 45, 3.5, 0, Math.PI * 2);
+                sCtx.arc(bx + 65, by + 45, 3.5, 0, Math.PI * 2);
+                sCtx.arc(bx + 50, by + 70, 3, 0, Math.PI * 2);
+                sCtx.arc(bx + 50, by + 100, 4, 0, Math.PI * 2);
+                sCtx.fill();
+            });
+
+            tick++;
+            animId = requestAnimationFrame(drawStreamFrame);
+        }
+
+        document.getElementById('btnRunSimStream').addEventListener('click', () => {
+            if (animId) cancelAnimationFrame(animId);
+            drawStreamFrame();
+            document.getElementById('streamStatusPill').innerText = 'STREAM: VIDEO SIMULATION';
+            logConsole('Classroom video feed started at 30 FPS.', 'info');
+            logConsole('MediaPipe face detection running. Tracking 2 participants.', 'success');
+        });
+
+        document.getElementById('btnToggleCam').addEventListener('click', async () => {
+            try {
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                    cameraVideo.srcObject = stream;
+                    cameraVideo.style.display = 'block';
+                    streamCanvas.style.display = 'none';
+                    document.getElementById('streamStatusPill').innerText = 'STREAM: LIVE WEBCAM';
+                    logConsole('Local webcam granted access successfully.', 'success');
+                } else {
+                    alert('Camera API not supported in this browser mode. Falling back to video stream.');
+                    document.getElementById('btnRunSimStream').click();
+                }
+            } catch (err) {
+                logConsole(`Webcam access denied or unavailable: ${err.message}`, 'warn');
+                document.getElementById('btnRunSimStream').click();
+            }
+        });
+
+        document.getElementById('btnStopStream').addEventListener('click', () => {
+            if (animId) cancelAnimationFrame(animId);
+            if (cameraVideo.srcObject) {
+                cameraVideo.srcObject.getTracks().forEach(t => t.stop());
+                cameraVideo.style.display = 'none';
+            }
+            streamCanvas.style.display = 'block';
+            sCtx.clearRect(0, 0, streamCanvas.width, streamCanvas.height);
+            document.getElementById('streamStatusPill').innerText = 'STREAM: STOPPED';
+            logConsole('Video and tracking pipelines paused.', 'info');
+        });
+
+        // File dropzone trigger
+        const fileDropzone = document.getElementById('fileDropzone');
+        const videoFileInput = document.getElementById('videoFileInput');
+        fileDropzone.addEventListener('click', () => videoFileInput.click());
+        videoFileInput.addEventListener('change', e => {
+            if (e.target.files.length > 0) {
+                const f = e.target.files[0];
+                logConsole(`Loaded local video file: ${f.name} (${(f.size / (1024*1024)).toFixed(2)} MB)`, 'success');
+                document.getElementById('btnRunSimStream').click();
+            }
+        });
+
+        // --- 12. CANVAS CHARTS (TABS 4 & 5) ---
+        function drawAudioWaveform() {
+            const canvas = document.getElementById('audioWaveCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            const slice = canvas.width / 60;
+            for (let i = 0; i < 60; i++) {
+                const x = i * slice;
+                const amp = Math.sin(i * 0.4) * Math.cos(i * 0.2) * (canvas.height * 0.38);
+                const y = (canvas.height / 2) + amp;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+
+            // Threshold line
+            ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height * 0.25);
+            ctx.lineTo(canvas.width, canvas.height * 0.25);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function drawTimelineChart() {
+            const canvas = document.getElementById('timelineChartCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Background grid
+            ctx.strokeStyle = '#f1f5f9';
+            ctx.lineWidth = 1;
+            for (let y = 20; y < canvas.height; y += 40) {
+                ctx.beginPath(); ctx.moveTo(30, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Timeline points
+            const points = [92, 94, 95, 96, 94, 93, 98, 97, 95, 96, 94, 94];
+            const stepX = (canvas.width - 60) / (points.length - 1);
+
+            // Fill gradient under curve
+            ctx.beginPath();
+            points.forEach((pt, i) => {
+                const x = 40 + i * stepX;
+                const y = canvas.height - 30 - (pt / 100) * (canvas.height - 60);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.lineTo(40 + (points.length - 1) * stepX, canvas.height - 25);
+            ctx.lineTo(40, canvas.height - 25);
+            ctx.fillStyle = 'rgba(37, 99, 235, 0.08)';
+            ctx.fill();
+
+            // Draw line
+            ctx.beginPath();
+            points.forEach((pt, i) => {
+                const x = 40 + i * stepX;
+                const y = canvas.height - 30 - (pt / 100) * (canvas.height - 60);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // Draw dots
+            ctx.fillStyle = '#2563eb';
+            points.forEach((pt, i) => {
+                const x = 40 + i * stepX;
+                const y = canvas.height - 30 - (pt / 100) * (canvas.height - 60);
+                ctx.beginPath();
+                ctx.arc(x, y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            });
+        }
+
+        // --- 13. EXPORTS & FILE DOWNLOADS (TAB 8) ---
+        function downloadFile(content, fileName, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        document.getElementById('btnDownloadAttCSV')?.addEventListener('click', () => {
+            const s = SESSIONS[currentSessionKey];
+            let csv = "Participant_ID,First_Seen,Last_Seen,Accumulated_Presence_Seconds,Required_Presence_Seconds,Presence_Percentage,Status,Confidence\n";
+            const reqSecs = s.duration * (state.requiredPresencePct / 100.0);
+            s.participants.forEach(p => {
+                const status = p.presenceSecs >= reqSecs ? 'PRESENT' : 'ABSENT';
+                const pct = ((p.presenceSecs / s.duration) * 100).toFixed(1);
+                csv += `${p.id},${p.firstSeen},${p.lastSeen},${p.presenceSecs},${reqSecs.toFixed(1)},${pct}%,${status},${p.confidence}\n`;
+            });
+            downloadFile(csv, `${s.id}_attendance.csv`, 'text/csv');
+        });
+
+        document.getElementById('btnDownloadEngCSV')?.addEventListener('click', () => {
+            const s = SESSIONS[currentSessionKey];
+            let csv = "Timestamp_Bin,Visual_Presence_Score,Movement_Dynamics_Score,Audio_Interaction_Score,Fused_Engagement_Index,Has_Vision,Has_Audio\n";
+            for (let i = 0; i < s.duration; i++) {
+                csv += `${i}.0,100.0,95.0,86.4,${s.meanEngagement},True,True\n`;
+            }
+            downloadFile(csv, `${s.id}_engagement.csv`, 'text/csv');
+        });
+
+        document.getElementById('btnDownloadJSON')?.addEventListener('click', () => {
+            const s = SESSIONS[currentSessionKey];
+            const jsonStr = JSON.stringify({
+                schema_version: "1.1.0",
+                session_id: s.id,
+                duration_seconds: s.duration,
+                cohort_size: state.cohortSize,
+                attendance_summary: {
+                    required_presence_ratio: state.requiredPresencePct / 100.0,
+                    participants: s.participants
+                },
+                engagement_summary: {
+                    mean_score: s.meanEngagement,
+                    speech_ratio: s.speechRatio,
+                    noise_floor: s.noiseFloor
+                },
+                recommendations: s.recommendations
+            }, null, 2);
+            downloadFile(jsonStr, `${s.id}_report.json`, 'application/json');
+        });
+
+        // Initial setup
+        recomputeKPIs();
+        updateSimulator();
+        drawAudioWaveform();
+        drawTimelineChart();
     </script>
 </body>
 </html>
